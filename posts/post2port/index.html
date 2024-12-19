@@ -81,34 +81,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-<script>
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 150) {
-            document.querySelector('.scroll-title').classList.add('visible');
-        } else {
-            document.querySelector('.scroll-title').classList.remove('visible');
-        }
-    });
-    </script>
-    
-    <style>
-    .scroll-title {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: var(--theme);
-        padding: 1rem;
-        transform: translateY(-100%);
-        transition: transform 0.3s ease;
-        z-index: 999;
-    }
-    
-    .scroll-title.visible {
-        transform: translateY(0);
-    }
-    </style>
-
 <meta property="og:url" content="https://chuckles201.github.io/posts/post2port/">
   <meta property="og:site_name" content="Charlie&#39;s Blog">
   <meta property="og:title" content="Notebook-post">
@@ -277,26 +249,15 @@ Link to an arbitrary github file and load/display!
   <footer class="post-footer">
     <ul class="post-tags">
     </ul>
-  </footer><div id="disqus_thread"></div>
-<script>
-    window.disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "charlie_awesome" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
+  </footer><script src="https://utteranc.es/client.js"
+        repo="chuckles201/chuckles201.github.io"
+        issue-term="pathname"
+        theme="preferred-color-scheme"
+        crossorigin="anonymous"
+        async>
+
+        
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </article>
     </main>
     
