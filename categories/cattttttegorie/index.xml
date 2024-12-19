@@ -2,39 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>CatTTTTTegorie on Charlie&#39;s Blog</title>
-    <link>https://chuckles201.github.io/categories/cattttttegorie/</link>
+    <link>http://localhost:1313/categories/cattttttegorie/</link>
     <description>Recent content in CatTTTTTegorie on Charlie&#39;s Blog</description>
     <generator>Hugo -- 0.140.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Dec 2024 21:26:37 -0500</lastBuildDate>
-    <atom:link href="https://chuckles201.github.io/categories/cattttttegorie/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Intro-Post</title>
-      <link>https://chuckles201.github.io/posts/post1/</link>
-      <pubDate>Wed, 18 Dec 2024 21:26:37 -0500</pubDate>
-      <guid>https://chuckles201.github.io/posts/post1/</guid>
-      <description>&lt;h3 id=&#34;new-posts&#34;&gt;New-posts:&lt;/h3&gt;
-&lt;p&gt;To create posts, just use&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;hugo new /posts/name.md
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;and then edit the markdown!&lt;/p&gt;
-&lt;h3 id=&#34;editing-our-themesother-settings&#34;&gt;Editing our themes/other settings:&lt;/h3&gt;
-&lt;p&gt;Go into our config file, and follow documentation of your theme. Also, to add new link, just create the file, the url, and then link the layout to a folder in the theme!&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;menu&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;main&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        - &lt;span style=&#34;color:#f92672&#34;&gt;identifier&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;categories&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Categories&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;weight&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;url&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;/categories/&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        - &lt;span style=&#34;color:#f92672&#34;&gt;identifier&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;archives&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Archives&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;weight&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;url&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;/archives/&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        - &lt;span style=&#34;color:#f92672&#34;&gt;identifier&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;tags&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Tags&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;weight&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;url&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;/tags/&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/adityatelange/hugo-PaperMod/wiki/Variables&#34;&gt;more params:&lt;/a&gt;&lt;/p&gt;</description>
-    </item>
+    <atom:link href="http://localhost:1313/categories/cattttttegorie/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

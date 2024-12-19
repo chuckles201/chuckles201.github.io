@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Tooto on Charlie&#39;s Blog</title>
-    <link>https://chuckles201.github.io/tags/tooto/</link>
+    <link>http://localhost:1313/tags/tooto/</link>
     <description>Recent content in Tooto on Charlie&#39;s Blog</description>
     <generator>Hugo -- 0.140.0</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 18 Dec 2024 21:26:37 -0500</lastBuildDate>
-    <atom:link href="https://chuckles201.github.io/tags/tooto/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/tooto/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Intro-Post</title>
-      <link>https://chuckles201.github.io/posts/post1/</link>
+      <link>http://localhost:1313/posts/walkthru_site/</link>
       <pubDate>Wed, 18 Dec 2024 21:26:37 -0500</pubDate>
-      <guid>https://chuckles201.github.io/posts/post1/</guid>
+      <guid>http://localhost:1313/posts/walkthru_site/</guid>
       <description>&lt;h3 id=&#34;new-posts&#34;&gt;New-posts:&lt;/h3&gt;
 &lt;p&gt;To create posts, just use&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;hugo new /posts/name.md

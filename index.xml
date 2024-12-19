@@ -9,10 +9,22 @@
     <lastBuildDate>Wed, 18 Dec 2024 21:26:37 -0500</lastBuildDate>
     <atom:link href="https://chuckles201.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Intro-Post</title>
-      <link>https://chuckles201.github.io/posts/post1/</link>
+      <title>Notebook-post</title>
+      <link>https://chuckles201.github.io/posts/loading_noteb/</link>
       <pubDate>Wed, 18 Dec 2024 21:26:37 -0500</pubDate>
-      <guid>https://chuckles201.github.io/posts/post1/</guid>
+      <guid>https://chuckles201.github.io/posts/loading_noteb/</guid>
+      <description>&lt;h1 id=&#34;trying-to-load-jupyter-notebook&#34;&gt;Trying to load jupyter-notebook&lt;/h1&gt;
+&lt;p&gt;Goals&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Link/display arbitrary jupyter notebooks in cool format (and translate to markdown)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;How are we going to load/fetch this information from our site?&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Setting up Hugo PaperMod site!</title>
+      <link>https://chuckles201.github.io/posts/walkthru_site/</link>
+      <pubDate>Wed, 18 Dec 2024 21:26:37 -0500</pubDate>
+      <guid>https://chuckles201.github.io/posts/walkthru_site/</guid>
       <description>&lt;h3 id=&#34;new-posts&#34;&gt;New-posts:&lt;/h3&gt;
 &lt;p&gt;To create posts, just use&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;hugo new /posts/name.md
@@ -37,14 +49,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/adityatelange/hugo-PaperMod/wiki/Variables&#34;&gt;more params:&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Notebook-post</title>
-      <link>https://chuckles201.github.io/posts/post2port/</link>
-      <pubDate>Wed, 18 Dec 2024 21:26:37 -0500</pubDate>
-      <guid>https://chuckles201.github.io/posts/post2port/</guid>
-      <description>&lt;h1 id=&#34;trying-to-load-jupyter-notebook&#34;&gt;Trying to load jupyter-notebook&lt;/h1&gt;
-&lt;ol&gt;
-&lt;li&gt;Link to an arbitrary github file and load/display!&lt;/li&gt;
-&lt;/ol&gt;</description>
+      <title>Blog Manifesto</title>
+      <link>https://chuckles201.github.io/manifesto/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://chuckles201.github.io/manifesto/</guid>
+      <description>manifesto</description>
     </item>
   </channel>
 </rss>
