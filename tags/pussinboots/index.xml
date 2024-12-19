@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Pussinboots on Charlie&#39;s Blog</title>
+    <link>https://chuckles201.github.io/tags/pussinboots/</link>
+    <description>Recent content in Pussinboots on Charlie&#39;s Blog</description>
+    <generator>Hugo -- 0.140.0</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 18 Dec 2024 21:26:37 -0500</lastBuildDate>
+    <atom:link href="https://chuckles201.github.io/tags/pussinboots/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Intro-Post</title>
+      <link>https://chuckles201.github.io/posts/post1/</link>
+      <pubDate>Wed, 18 Dec 2024 21:26:37 -0500</pubDate>
+      <guid>https://chuckles201.github.io/posts/post1/</guid>
+      <description>&lt;h3 id=&#34;new-posts&#34;&gt;New-posts:&lt;/h3&gt;
+&lt;p&gt;To create posts, just use&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;hugo new /posts/name.md
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and then edit the markdown!&lt;/p&gt;
+&lt;h3 id=&#34;editing-our-themesother-settings&#34;&gt;Editing our themes/other settings:&lt;/h3&gt;
+&lt;p&gt;Go into our config file, and follow documentation of your theme. Also, to add new link, just create the file, the url, and then link the layout to a folder in the theme!&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;menu:
+    main:
+        - identifier: categories
+        name: Categories
+        weight: 10
+        url: /categories/
+        - identifier: archives
+        name: Archives
+        weight: 20
+        url: /archives/
+        - identifier: tags
+        name: Tags
+        weight: 30
+        url: /tags/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/adityatelange/hugo-PaperMod/wiki/Variables&#34;&gt;more params:&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
