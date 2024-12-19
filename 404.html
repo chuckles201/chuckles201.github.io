@@ -55,7 +55,58 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="https://chuckles201.github.io/404.html">
+</noscript>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+onload="renderMathInElement(document.body);"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError : false
+    });
+});
+</script>
+
+
+
+
+<script>
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 150) {
+            document.querySelector('.scroll-title').classList.add('visible');
+        } else {
+            document.querySelector('.scroll-title').classList.remove('visible');
+        }
+    });
+    </script>
+    
+    <style>
+    .scroll-title {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--theme);
+        padding: 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+    }
+    
+    .scroll-title.visible {
+        transform: translateY(0);
+    }
+    </style>
+
+<meta property="og:url" content="https://chuckles201.github.io/404.html">
   <meta property="og:site_name" content="Charlie&#39;s Blog">
   <meta property="og:title" content="404 Page not found">
   <meta property="og:locale" content="en-us">

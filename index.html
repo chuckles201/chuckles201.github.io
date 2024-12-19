@@ -58,7 +58,58 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="https://chuckles201.github.io/">
+</noscript>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+onload="renderMathInElement(document.body);"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError : false
+    });
+});
+</script>
+
+
+
+
+<script>
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 150) {
+            document.querySelector('.scroll-title').classList.add('visible');
+        } else {
+            document.querySelector('.scroll-title').classList.remove('visible');
+        }
+    });
+    </script>
+    
+    <style>
+    .scroll-title {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--theme);
+        padding: 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+    }
+    
+    .scroll-title.visible {
+        transform: translateY(0);
+    }
+    </style>
+
+<meta property="og:url" content="https://chuckles201.github.io/">
   <meta property="og:site_name" content="Charlie&#39;s Blog">
   <meta property="og:title" content="Charlie&#39;s Blog">
   <meta property="og:locale" content="en-us">
@@ -185,6 +236,18 @@ menu: main: - identifier: categories name: Categories weight: 10 url: /categorie
   </div>
   <footer class="entry-footer"><span title='2024-12-18 21:26:37 -0500 EST'>December 18, 2024</span></footer>
   <a class="entry-link" aria-label="post link to Intro-Post" href="https://chuckles201.github.io/posts/post1/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Notebook-post
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Trying to load jupyter-notebook Link to an arbitrary github file and load/display! </p>
+  </div>
+  <footer class="entry-footer"><span title='2024-12-18 21:26:37 -0500 EST'>December 18, 2024</span></footer>
+  <a class="entry-link" aria-label="post link to Notebook-post" href="https://chuckles201.github.io/posts/post2port/"></a>
 </article>
     </main>
     

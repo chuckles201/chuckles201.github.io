@@ -55,7 +55,58 @@
         }
 
     </style>
-</noscript><meta property="og:url" content="https://chuckles201.github.io/archives/">
+</noscript>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+onload="renderMathInElement(document.body);"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\(", right: "\\)", display: false},
+            {left: "\\[", right: "\\]", display: true}
+        ],
+        throwOnError : false
+    });
+});
+</script>
+
+
+
+
+<script>
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 150) {
+            document.querySelector('.scroll-title').classList.add('visible');
+        } else {
+            document.querySelector('.scroll-title').classList.remove('visible');
+        }
+    });
+    </script>
+    
+    <style>
+    .scroll-title {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--theme);
+        padding: 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+    }
+    
+    .scroll-title.visible {
+        transform: translateY(0);
+    }
+    </style>
+
+<meta property="og:url" content="https://chuckles201.github.io/archives/">
   <meta property="og:site_name" content="Charlie&#39;s Blog">
   <meta property="og:title" content="Archives">
   <meta property="og:description" content="archives">
@@ -184,12 +235,12 @@
 <div class="archive-year">
   <h2 class="archive-year-header" id="2024">
     <a class="archive-header-link" href="#2024">2024</a>
-    <sup class="archive-count">&nbsp;1</sup>
+    <sup class="archive-count">&nbsp;2</sup>
   </h2>
   <div class="archive-month">
     <h3 class="archive-month-header" id="2024-December">
       <a class="archive-header-link" href="#2024-December">December</a>
-      <sup class="archive-count">&nbsp;1</sup>
+      <sup class="archive-count">&nbsp;2</sup>
     </h3>
     <div class="archive-posts">
       <div class="archive-entry">
@@ -197,6 +248,12 @@
         </h3>
         <div class="archive-meta"><span title='2024-12-18 21:26:37 -0500 EST'>December 18, 2024</span></div>
         <a class="entry-link" aria-label="post link to Intro-Post" href="https://chuckles201.github.io/posts/post1/"></a>
+      </div>
+      <div class="archive-entry">
+        <h3 class="archive-entry-title entry-hint-parent">Notebook-post
+        </h3>
+        <div class="archive-meta"><span title='2024-12-18 21:26:37 -0500 EST'>December 18, 2024</span></div>
+        <a class="entry-link" aria-label="post link to Notebook-post" href="https://chuckles201.github.io/posts/post2port/"></a>
       </div>
     </div>
   </div>
