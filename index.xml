@@ -4,7 +4,7 @@
     <title>Charlie&#39;s Blog</title>
     <link>https://chuckles201.github.io/</link>
     <description>Recent content on Charlie&#39;s Blog</description>
-    <generator>Hugo -- 0.140.0</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 19 Dec 2024 16:39:50 -0500</lastBuildDate>
     <atom:link href="https://chuckles201.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -23,15 +23,6 @@
 &lt;p&gt;Latstly, we&amp;rsquo;ll be able to stack multiple notebooks into one &amp;lsquo;project&amp;rsquo;.&lt;/p&gt;
 &lt;h2 id=&#34;running-scripts-on-website&#34;&gt;Running scripts on website&lt;/h2&gt;
 &lt;p&gt;Since our site is static, we&amp;rsquo;ll need to have a built-in link to displaying our github page, and automatically converting it to markdown somehow inbetween.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Your Post Title</title>
-      <link>https://chuckles201.github.io/posts/test_note_b/</link>
-      <pubDate>Thu, 19 Dec 2024 16:39:50 -0500</pubDate>
-      <guid>https://chuckles201.github.io/posts/test_note_b/</guid>
-      <description>&lt;h3 id=&#34;warning-remote-files-loaded-below&#34;&gt;&lt;em&gt;&lt;strong&gt;WARNING: REMOTE FILES LOADED BELOW&lt;/strong&gt;&lt;/em&gt;&lt;/h3&gt;
-&lt;p&gt;Here is some text in Markdown.&lt;/p&gt;
-&lt;p&gt;And here is more Markdown text.s&lt;/p&gt;</description>
     </item>
     <item>
       <title>Setting up Hugo PaperMod site!</title>

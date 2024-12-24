@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
+<meta name="google" content="notranslate">
 <title>Jupyter-To-Site | Charlie&#39;s Blog</title>
 <meta name="keywords" content="">
 <meta name="description" content="Here, we&rsquo;ll be parsing our jupyter notebook from a random github link, and reading it out into markdown:
@@ -19,7 +20,7 @@ Running scripts on website
 Since our site is static, we&rsquo;ll need to have a built-in link to displaying our github page, and automatically converting it to markdown somehow inbetween.">
 <meta name="author" content="">
 <link rel="canonical" href="https://chuckles201.github.io/posts/jupyter_converter/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.6a415fa7fc28a3325d0b09df302c418b25489af6a1e14001cbcfc5c872331561.css" integrity="sha256-akFfp/woozJdCwnfMCxBiyVImvah4UABy8/FyHIzFWE=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://chuckles201.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://chuckles201.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://chuckles201.github.io/favicon-32x32.png">
@@ -143,8 +144,8 @@ Since our site is static, we&rsquo;ll need to have a built-in link to displaying
   "keywords": [
     
   ],
-  "articleBody": "Here, we’ll be parsing our jupyter notebook from a random github link, and reading it out into markdown:\nMarkdown = markdown Code = markdown code block Code output = Images/code block Furthermore, we will fetch a github repo and automatically update it, when the file at the given like has been updated.\nLatstly, we’ll be able to stack multiple notebooks into one ‘project’.\nRunning scripts on website Since our site is static, we’ll need to have a built-in link to displaying our github page, and automatically converting it to markdown somehow inbetween.\nFirst, let’s do a test. We’ll load in the raw code from an arbitrary github file, and just change the first letter; to make sure we can handle changing, and loading dynamic content.\nRunning Javascript Let’s try to run a script that will do something to the file we call it in (client-side).\nFirst, we create a javascript file in /static/javascript\nModifying Markdown post Now that we can run our javascript, let’s make a change to the file that we’ve inserted the script on (any file with my_script: true).\nThen we can simply call it with:\n--- title: \"Your Post Title\" date: '2024-12-19T16:39:50-05:00' jsFiles: - \"/js/remote-content.js\" --- We must include in our header-file now:\n{{- if and .IsPage .Params.jsFiles -}} {{- range .Params.jsFiles -}} \u003cscript defer src=\"{{ . }}\"\u003e \u003c/script\u003e {{- end -}} {{- end -}} To breifly explain this code, we are\nchecking if our page is actually a blog post checking if we have js file params, and reading it. adding the script to the header. Program Now, we must actually write the program. Note that javascript only modifies the html file that is sitting on-top of the markdown file. For our purposes, we just change the markdown with a javascript function.\nTo understand how our markdown is loaded in an html document, we can look at our themes ‘single.html’ file, which is a mix of html and css.\nWe can see in our file, we have our content loaded as :\n{{- if .Content }} \u003cdiv class=\"post-content\"\u003e {{- if not (.Param \"disableAnchoredHeadings\") }} {{- partial \"anchored_headings.html\" .Content -}} {{- else }}{{ .Content }}{{ end }} \u003c/div\u003e {{- end }} ok, so what is .Content, and how can we modify it?\n",
-  "wordCount" : "375",
+  "articleBody": "Here, we’ll be parsing our jupyter notebook from a random github link, and reading it out into markdown:\nMarkdown = markdown Code = markdown code block Code output = Images/code block Furthermore, we will fetch a github repo and automatically update it, when the file at the given like has been updated.\nLatstly, we’ll be able to stack multiple notebooks into one ‘project’.\nRunning scripts on website Since our site is static, we’ll need to have a built-in link to displaying our github page, and automatically converting it to markdown somehow inbetween.\nFirst, let’s do a test. We’ll load in the raw code from an arbitrary github file, and just change the first letter; to make sure we can handle changing, and loading dynamic content.\nIncluding in header Ideally, we would call in our custom script from the header of our file, and input a link:\n--- title: \"Your Post Title\" date: '2024-12-19T16:39:50-05:00' js_fetch_script: true - url: www.fetch_file_here.com/raw --- and then the script would modify all of the contents of the markdown file.\nTo do this, first we create a custom script in our static/js/custom_script (more on this later), and assumes it does what we want it to do. Now all we need to do is actually call it into a file.\nTo do this, let’s look at our single.html file (for our posts):\n{{- if not (.Param \"hideMeta\") }} \u003cdiv class=\"post-meta\"\u003e {{- partial \"post_meta.html\" . -}} {{- partial \"translation_list.html\" . -}} {{- partial \"edit_post.html\" . -}} {{- partial \"post_canonical.html\" . -}} \u003c/div\u003e {{- end }} we have a combination of html/js/css and php; the php is checking our parameters (in our header), while the html/js/css runs if the php allows it to.\nSo, let’s just check for our custom parameter:\n{{- if (Param \"js_fetch_script\") }} \u003cscript src=\"{{ \"js/jupy_load.js\" | relURL }}\"\u003e\u003c/script\u003e {{- end }} this seems to work. So, if we just include this at the end of our single.html, we can run arbitrary javascript, and completely modify our file.\nHowever, we’ll also want to pass in a parameter (url), which we can do in the following way:\n{{- if (.Param \"js_fetch_script\") }} \u003cscript src=\"{{ \"js/jupy_load.js\" | relURL }} data-parameter={{ .Param \"js_fetch_script\" }}\"\u003e\u003c/script\u003e {{- end }} which bascially checks if we fed in a file, and then passes in the parameter, which we can acess from our javascript like this:\nwindow.addEventListener('DOMContentLoaded', async function () { try { // Read the parameter const scripts = document.getElementsByTagName('script'); const currentScript = Array.from(scripts).find(script =\u003e script.src.includes('jupy_load.js')); const parameter = currentScript.getAttribute('data-parameter'); console.log(parameter); // Will print: param-value } catch (error) { console.error('Error', error); } }); Now we can pass in any parameter (we’ll use this for the url later) into our file, and load it! Unfortunately, we actually have to search the script for jupy_load.js, but this is fine and still works (directly acessing the data-parameter didn’t work).\nModifying our file Now, let’s try to modify our post.\nThe key part is our markdown; we still want to adhere to the overall site/style, so we only want to select the markdown.\n{{- if .Content }} \u003cdiv class=\"post-content\"\u003e {{- if not (.Param \"disableAnchoredHeadings\") }} {{- partial \"anchored_headings.html\" .Content -}} {{- else }}{{ .Content }}{{ end }} \u003c/div\u003e {{- end }} Ideally we would want to change the actual markdown, but this is impossible, as hugo does this in it’s build process. Therefore to proceed, we would need to\nFetch the content from a remote URL with javascript Create a custom javascript markdown converter that worked client-side Changed the HTML/CSS of site dynamically; effictively matching HUGO’s functionality, but with javascript so, we will be procedding with python, since the process can still be streamlined; python will do the fetching, and modify the markdown content, so we can focus on formatting without having to re-write hugo.\nPerhaps I could visit this approach later, however I don’t see a method that would work without using a github bot (maybe?), or some server.\nPython Approach With our python code, we have a much more flexible way to streamline our progress; and here is an overview of the functionality:\nRun a bash command that commits the repository, and fetches the remote jupyter-notebooks, updating our markdown files. Let’s get into running our python scripts and making sure we can modify our markdown files, fetching the url/info from remote sites, parsing/formatting the jupyter notebooks, and finally running the batch-script which streamlines this process.\nRunning the script First let’s import/download these modules:\n# for modifying files \\ # and reading/writing import os import sys # for fetching url import requests we can simply modify a file like this:\nimport sys import requests print(\"Hello world.\") path = os.path.abspath('../blog/content/posts/test_note_b.md') with open(path,'r') as file: print(file.read()) Requests Now, let’s try to understand how we are going to retreive the data, this part is very complex:\n# requesting url r = requests.get(url=url) print(r.text) and now we have the text (the url was to a raw github link)!\nParsing the JSON (the crux) Now, we need to be able to load an arbitrary url, and render the:\ncode images output into our markdown file that we connect our post to (more on this later).\nFirst, let’s analyze the output of the get request:\nview get request\r{ \"cells\": [ { \"cell_type\": \"markdown\", \"metadata\": {}, \"source\": [ \"### Using pre-trained HF vae\" ] }, { \"cell_type\": \"code\", \"execution_count\": 13, \"metadata\": {}, \"outputs\": [], \"source\": [ \"import huggingface_hub\\n\", \"import torch\\n\", \"from get_vae import get_vae\\n\", \"import sys\\n\", \"import os\\n\", \"sys.path.append(os.path.abspath('../data'))\\n\", \"import dataloader\\n\", \"\\n\", \"dataset = dataloader.ImageDataset(None,'raw_images',\\n\", \" label_folder='../data/label_folder',\\n\", \" im_extension='jpeg',\\n\", \" use_latents=True,\\n\", \" latent_folder='../data/latent_folder_sdxl',\\n\", \" device='cpu')\\n\", \"full_vae, encoder = get_vae()\\n\" ] }, { \"cell_type\": \"code\", \"execution_count\": 18, \"metadata\": {}, \"outputs\": [ { \"name\": \"stderr\", \"output_type\": \"stream\", \"text\": [ \"Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-12.002044..16.78721].\\n\", \"Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-0.0874937..0.815207].\\n\" ] }, { \"name\": \"stdout\", \"output_type\": \"stream\", \"text\": [ \"torch.Size([1, 4, 32, 32]) torch.Size([3, 256, 256])\\n\" ] }, { \"name\": \"stderr\", \"output_type\": \"stream\", \"text\": [ \"Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-14.887081..17.92659].\\n\", \"Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-0.11195281..0.91997355].\\n\" ] }, { \"name\": \"stdout\", \"output_type\": \"stream\", \"text\": [ \"torch.Size([1, 4, 32, 32]) torch.Size([3, 256, 256])\\n\" ] }, { \"data\": { \"image/png\": \"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\", \"text/plain\": [ \"\" ] }, \"metadata\": {}, \"output_type\": \"display_data\" } ], \"source\": [ \"import matplotlib.pyplot as plt\\n\", \"import torchvision\\n\", \"fig,ax = plt.subplots(2,2)\\n\", \"\\n\", \"\\n\", \"# outputs x,loss\\n\", \"for i in range(2):\\n\", \" ind = torch.randint(0,len(dataset),size=(1,))\\n\", \" datapt = dataset[ind][0]\\n\", \" model_out = full_vae.decode(datapt.to('cpu'))[0].to('cpu')\\n\", \" print(datapt.shape,model_out.shape)\\n\", \" with torch.no_grad():\\n\", \" ax[i][0].imshow(datapt.squeeze(0).permute(1,2,0))\\n\", \" ax[i][1].imshow(model_out.permute(1,2,0))\\n\", \"\\n\" ] } ], \"metadata\": { \"kernelspec\": { \"display_name\": \"manimtest\", \"language\": \"python\", \"name\": \"python3\" }, \"language_info\": { \"codemirror_mode\": { \"name\": \"ipython\", \"version\": 3 }, \"file_extension\": \".py\", \"mimetype\": \"text/x-python\", \"name\": \"python\", \"nbconvert_exporter\": \"python\", \"pygments_lexer\": \"ipython3\", \"version\": \"3.12.7\" } }, \"nbformat\": 4, \"nbformat_minor\": 2 } beleive it or not, the image/png was much longer, I just clipped the size.\nNow, let’s outline the high-level structure of our data:\n1. \"cells\", overall wrapper (list) 2. dictionary for each cell: \"cell_type\"/\"source\": specify cell-type, metadata, outputs 3. Outputs: divided into the different 'types' of outputs, with names and So, here is code to print the high-level information\nurl = \"https://raw.githubusercontent.com/chuckles201/DiT-Implementation/refs/heads/main/VAE/download.ipynb\" # requesting url r = requests.get(url=url) # getting dict r = json.loads(r.text) for i in range(len(r[\"cells\"])): ct = r[\"cells\"][i][\"cell_type\"] print(f\"{ct}_#{i} keys: {r[\"cells\"][i].keys()}\") Output:\nmarkdown_#0 keys: dict_keys(['cell_type', 'metadata', 'source']) code_#1 keys: dict_keys(['cell_type', 'execution_count', 'metadata', 'outputs', 'source']) code_#2 keys: dict_keys(['cell_type', 'execution_count', 'metadata', 'outputs', 'source']) ‘Connecting’ post and program Let’s start with the easy part; writing our markdown to our file.\nWe’ll create a dictionary of all the post-files and all of the urls, and for each post-file, we’ll create a shortcode that does nothing, but specifies where we want our python file to start/stop the jupyter notebook.\nHere’s the program:\ncode\rimport os import sys import requests import json import regex as re ### Helper functions ### # function to write at specific # location in file def write_mdfile(start_token,stop_token,file,to_write): with open(file,'r') as file_read: text = file_read.read() # split any new-line # parethesis preserve info tokens = re.split(r'(\\n+)',text) # replace all-inbetween! try: start = tokens.index(start_token) stop = tokens.index(stop_token) except: raise Exception(\"Missing note-b token\") tokens = [(tokens[i]) for i in range(len(tokens)) if i\u003estop or i\u003cstart] # append to_write (note-b) tokens.insert(start,to_write) # inserting before/after the tokens... tokens.insert(start+1,stop_token) tokens.insert(start,start_token) # writing back to file with open(file,'w') as file_write: file_write.write(\"\".join(tokens)) This allows us to write to any markdown file, as long as we have our special start/top shortcodes, which we can easily include.\nNow, let’s iterate through the dictionary of ‘connected’ posts and urls, and write the url for each post, given our start/stop tokens.\ncode\rimport os import sys import requests import json import regex as re ### Helper functions ### # function to write at specific # location in file def write_mdfile(start_token,stop_token,file,to_write): with open(file,'r') as file_read: text = file_read.read() # split any new-line # parethesis preserve info tokens = re.split(r'(\\n+)',text) # replace all-inbetween! try: start = tokens.index(start_token) stop = tokens.index(stop_token) except: raise Exception(\"Missing note-b token\") tokens = [(tokens[i]) for i in range(len(tokens)) if i\u003estop or i\u003cstart] # append to_write (note-b) tokens.insert(start,to_write) # inserting before/after the tokens... tokens.insert(start+1,stop_token) tokens.insert(start,start_token) # writing back to file with open(file,'w') as file_write: file_write.write(\"\".join(tokens)) def json_to_md(data): return data ### MAIN PROGRAM ### def main(): # retreive url with open('post_to_url.json','r') as f: post_url_dict = json.load(f) for post in list(post_url_dict.keys()): url = post_url_dict[post] # requesting url r = requests.get(url) # getting dict # adding \\n for correctness r = str(r.text)[:1000] r = \"\".join([\"\\n\",\"```json\",r,\"```\",\"\\n\"]) # parsing text... to_write = json_to_md(r) # quick # creating file path = os.path.abspath(f'../blog/content/posts/{post}.md') write_mdfile(start_token=\"{{ jupyter_token_start \u003e}}\", stop_token=\"{{ jupyter_token_end \u003e}}\", file=path, to_write=to_write) print(\"**********\") print(f\"Wrote file: {path}\\nFrom URL: {url} ({len(r)} chars)\") print(\"**********\") main() One last note, is that we may want to have our delimiter have ‘%’ tags instead of ‘\u003c\u003e’ so we can inject markdown.\nDealing with markdown cell The markdown cell is the easiest, we simply will load in the markdown as-is (and add a new-line). I am saving all of the ‘stream’ of cell-data into one-list.\nBasically, all we’ll need to do for the markdown is to take the ’list’ of strings (each new line seperates a new element) and join them into one-long steam, and add a \\n to have a new-line.\nhere is the code so far:\ncode\rdef json_to_md(data_dict): # list of cells cells = data_dict[\"cells\"] # other info (like language) metadata = data_dict[\"metadata\"] # full string/file data_stream = [] # for each cell which is a dictionary # with source,outputs, for i, cell in enumerate(cells): # markdown cell if cell[\"cell_type\"] == \"markdown\": # list of elements lines = cell[\"source\"] lines.append(\"\\n\") # concat lines = \"\".join(lines) data_stream.append(lines) elif cell[\"cell_type\"] == \"code\": pass this works.\nCode-Cell Now we need to do the same thing, accept add our three ` and specify the language. Luckily, this part will be very easy, and very similar to our markdown (we’re not working on outputs yet.)\ncode\relif cell[\"cell_type\"] == \"code\": ####### SOURCE ####### # list of elements lines = cell[\"source\"] # for code-formatting lines.append(\"```\\n\") lines.insert(0,f\"```{language}\\n\") # concat lines = \"\".join(lines) data_stream.append(lines) ######################### Code-Cell: Outputs Now ket’s deal with the actual outputs of our code-cell, we’ll be loading it the same way as jupyter, which is: Text, and then Image.\nOutputs are lists of dictionaries, where each dictionary is a unique ’type’ of output, for example we can have ’error’ messages from the terminal, images, and then the actual code-output.\nText To deal with out text-outputs, we’ll iterate through the list of dictionaries, and check what-type the output is. We’ll just check if the text is ‘stream’, and then output based on this.Here are the types of streams:\nstderr: warnings/messages from console stdout output-code we’ll highlight the stderr specially, as it is a warning (eventually)…\nWe’ll also create a special-output-box for our output so that it formats nicely on our site.\nSo far, all we’re doing is understanding the stucture of the dictionary that we get from our raw content, and then we simply load the outputs in-order, and append them to a list (which is then concatenated into a string). Once we do this, and we can add custom-formatting in the form of short-codes, but I’m making it simplistic for now.\nFor our code-cells since we have to deal with both ‘stream’ and ‘data’ ouputs, we iterate through all of the dictionaries inside of our cell-dictionary and siplay them in the same order.\nSince this got a little messy for me, here is the structure of the outputs:\n|Outputs (list) | | Dictionary 1 | | Type | | Output | | Dictionary 2 | | Type | | Output | | Dictionary~(Data) | | Data: | | Text/plain | | Image So the outputs are a list of dictionaries, and each dictionary contains both the information, and data about the information. And it is displayed in order, so we iterate through the list of dictionaries, and display each in order.\nHowever, when we have ‘data’ which is plain text/images, we have to acess another dictionary. I’m not sure why they structured it this way, but it’s what we’re working with.\nImages Now, we’ll have to convert images in our cell-outputs into, well, images.\nFirst, let’s deal with the simple case where images are stored in BASE-64 format, which is a format used for JSON, where bits are encoded with printable characters.\nHere is a high-level view of the implementation of the function:\nWe take the image-string/file-extentsion We create a new path for the image, which will be loaded from markdown. We convert the base64 to binary see here We save the image, and then insert a shortcode to load it: Image-Converter: code\rdef image_base64_save(raw_data,path_to_save): # binary-writing-pdf def bytes_to_img(raw_str,save_path): # decode to bytes raw_bytes = base64.b64decode(raw_str) # temporary file image = Image.open(BytesIO(raw_bytes)) # show image! image.save(f\"{save_path}\") bytes_to_img(raw_data,path_to_save) Usage:\ncode\r### IMG-CONVERT ### img_in = False image_types = [\"png\",\"jpg\",\"jpeg\",\"img\",\"webp\",\"gif\",\"pdf\",\"svg\",\"eps\"] img_ext = \"\" for type in image_types: if f\"image/{type}\" in list(output[\"data\"].keys()): img_in = True img_ext = type if img_in: start = \"\\n\" if not need_end: start = '\\n{\u003c code_output summary=\"Output:\" open=\"true\" \u003e}\\n' need_end = True end = str(\"{\u003c/ code_output br \u003e}\\n\") need_end = False # got end # saving image at path! raw_data = output[\"data\"][f\"image/{img_ext}\"] # making sure path is correct img_name = f\"cell_{i}_img.png\" path_img_new = \"\".join([path_img, f\"/{img_name}\"]) helpers.image_base64_save(raw_data=raw_data, path_to_save=path_img_new) # not using /blog/static in md (implied) # saving with image name path_img_abs = path_img_new.split(\"/blog/static\")[1] print(f\"PATH SAVED: {path_img_new}\") print(f\"PATH MD: {path_img_abs}\") img_data = f'{\u003c image_output src=\"{path_img_abs}\" }' lines = [start] lines.append(img_data) lines.append(end) data_stream.append(\"\".join(lines)) ######################3 Note: I messed around with the code a little so shortcodes did not accidentally render on this page.\nThe main issue was dealing with the file extensions (saving vs. loading, because hugo assumes static directory), but that was easily fixed with some trial/error.\nOther fixes Another little problem I ran into was dealing with ‘\u003c\u003e’ type-strings (they render as html) in our outputs, to deal with this, I had to learn how to replace all ‘\u003c\u003e’ with their correspinding strings in regex, unless we actually wanted the short code. Here is that:\ncode\rimport regex as re def format_out(text): # Replace `\u003c` with `\u0026lt;` only if not preceeded by `{{' pattern = r'(?\u003c![{{])\u003c' replacement = \"\u0026lt;\" text = re.sub(pattern,replacement,text) # preceeds two characters pattern = r'\u003e(?![}}])' replacement = \"\u0026gt;\" text = re.sub(pattern,replacement,text) return text Beautifying Now that we can load in markdown, code, and code-outputs, I tried to make the outputs actually look-nice.\nI basically just tried new CSS, and looked at what looked visually appealing. The code-display I settled on is currently displaying on this page.\nNote: Don’t insert new scripts into page, it will affect everything! Create a new class and modify its CSS to play-around.\nI also made the choice to keep seperate collapsable boxes for each code-block, but if a code block directly followed another without an output, i left out an indent, while if an output followed, I kept an indent. This is because multiple succesive blocks without outputs are likely continualy building on eachother.\nLeaving side-notes I also wanted to add a way, so that in a given cell, I can leave a side-note (for editing in the website now), like a source being cited, or an explanation.\nI don’t know if this is viable, because it makes the viewing experience more strenous, and will require some finicking with the CSS for now.\nAdding other files Ok, now we can easily generalize our program to check for different start/end tokens, and based on the token, load the raw-text differently. We can easily just have ’token_start_python(or-any-other-language)’ and just load the raw-file; this is in case for some reason we wanted a post dedicated to a single file (or just any page.)\nExample of .ipynb (jupyter notebooks): test_ipynb Example of python (or any other language): raw_test Streamlining/‘1-execution’ Now, finally we’ll write a bash program that:\nInitialiazes/connects our site-repository. (remote origin) Run’s the update-script, builds the website, and pushes them to github automatically Then, automatically goes into our JupyterToMd repository, and saves any updates we may have made here Review/Learning Experience ",
+  "wordCount" : "2879",
   "inLanguage": "en",
   "datePublished": "2024-12-19T16:39:50-05:00",
   "dateModified": "2024-12-19T16:39:50-05:00",
@@ -230,6 +231,7 @@ Since our site is static, we&rsquo;ll need to have a built-in link to displaying
 <main class="main">
 
 <article class="post-single">
+  <meta name="google" content="notranslate">
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
@@ -244,19 +246,59 @@ Since our site is static, we&rsquo;ll need to have a built-in link to displaying
             <span class="details">Table of Contents</span>
         </summary>
 
-        <div class="inner"><ul>
+        <div class="inner"><ul><ul>
                 <li>
                     <a href="#running-scripts-on-website" aria-label="Running scripts on website">Running scripts on website</a><ul>
                         
                 <li>
-                    <a href="#running-javascript" aria-label="Running Javascript">Running Javascript</a></li>
+                    <a href="#including-in-header" aria-label="Including in header">Including in header</a></li>
                 <li>
-                    <a href="#modifying-markdown-post" aria-label="Modifying Markdown post">Modifying Markdown post</a></li>
+                    <a href="#modifying-our-file" aria-label="Modifying our file">Modifying our file</a></li></ul>
+                </li></ul>
+                    
                 <li>
-                    <a href="#program" aria-label="Program">Program</a>
+                    <a href="#python-approach" aria-label="Python Approach">Python Approach</a><ul>
+                        <ul>
+                        
+                <li>
+                    <a href="#running-the-script" aria-label="Running the script">Running the script</a></li></ul>
+                    
+                <li>
+                    <a href="#requests" aria-label="Requests">Requests</a></li>
+                <li>
+                    <a href="#parsing-the-json-the-crux" aria-label="Parsing the JSON (the crux)">Parsing the JSON (the crux)</a><ul>
+                        
+                <li>
+                    <a href="#connecting-post-and-program" aria-label="&lsquo;Connecting&rsquo; post and program">&lsquo;Connecting&rsquo; post and program</a></li>
+                <li>
+                    <a href="#dealing-with-markdown-cell" aria-label="Dealing with markdown cell">Dealing with markdown cell</a></li>
+                <li>
+                    <a href="#code-cell" aria-label="Code-Cell">Code-Cell</a></li>
+                <li>
+                    <a href="#code-cell-outputs" aria-label="Code-Cell: Outputs">Code-Cell: Outputs</a><ul>
+                        
+                <li>
+                    <a href="#text" aria-label="Text">Text</a></li></ul>
                 </li>
-            </ul>
-            </li>
+                <li>
+                    <a href="#images" aria-label="Images">Images</a></li>
+                <li>
+                    <a href="#other-fixes" aria-label="Other fixes">Other fixes</a></li></ul>
+                </li>
+                <li>
+                    <a href="#beautifying" aria-label="Beautifying">Beautifying</a><ul>
+                        
+                <li>
+                    <a href="#leaving-side-notes" aria-label="Leaving side-notes">Leaving side-notes</a></li></ul>
+                </li>
+                <li>
+                    <a href="#adding-other-files" aria-label="Adding other files">Adding other files</a></li>
+                <li>
+                    <a href="#streamlining1-execution" aria-label="Streamlining/&lsquo;1-execution&rsquo;">Streamlining/&lsquo;1-execution&rsquo;</a></li></ul>
+                </li>
+                <li>
+                    <a href="#reviewlearning-experience" aria-label="Review/Learning Experience">Review/Learning Experience</a>
+                </li>
             </ul>
         </div>
     </details>
@@ -273,42 +315,844 @@ Since our site is static, we&rsquo;ll need to have a built-in link to displaying
 <h2 id="running-scripts-on-website">Running scripts on website<a hidden class="anchor" aria-hidden="true" href="#running-scripts-on-website">#</a></h2>
 <p>Since our site is static, we&rsquo;ll need to have a built-in link to displaying our github page, and automatically converting it to markdown somehow inbetween.</p>
 <p>First, let&rsquo;s do a test. We&rsquo;ll load in the raw code from an arbitrary github file, and just change the first letter; to make sure we can handle changing, and loading dynamic content.</p>
-<h3 id="running-javascript"><em><strong>Running Javascript</strong></em><a hidden class="anchor" aria-hidden="true" href="#running-javascript">#</a></h3>
-<p>Let&rsquo;s try to run a script that will do something to the file we call it in (client-side).</p>
-<p>First, we create a javascript file in <code>/static/javascript</code></p>
-<h3 id="modifying-markdown-post"><em><strong>Modifying Markdown post</strong></em><a hidden class="anchor" aria-hidden="true" href="#modifying-markdown-post">#</a></h3>
-<p>Now that we can run our javascript, let&rsquo;s make a change to the file that we&rsquo;ve inserted the script on (any file with my_script: true).</p>
-<p>Then we can simply call it with:</p>
+<h3 id="including-in-header"><em><strong>Including in header</strong></em><a hidden class="anchor" aria-hidden="true" href="#including-in-header">#</a></h3>
+<p>Ideally, we would call in our custom script from the header of our file, and input a link:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">title</span>: <span style="color:#e6db74">&#34;Your Post Title&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">date</span>: <span style="color:#e6db74">&#39;2024-12-19T16:39:50-05:00&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">jsFiles</span>:
-</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;/js/remote-content.js&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">js_fetch_script</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">url</span>: <span style="color:#ae81ff">www.fetch_file_here.com/raw</span>
 </span></span><span style="display:flex;"><span>---
-</span></span></code></pre></div><p>We must include in our header-file now:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>{{<span style="color:#f92672">-</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">and</span> .<span style="color:#a6e22e">IsPage</span> .<span style="color:#a6e22e">Params</span>.<span style="color:#a6e22e">jsFiles</span> <span style="color:#f92672">-</span>}}
-</span></span><span style="display:flex;"><span>    {{<span style="color:#f92672">-</span> <span style="color:#a6e22e">range</span> .<span style="color:#a6e22e">Params</span>.<span style="color:#a6e22e">jsFiles</span> <span style="color:#f92672">-</span>}}
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span> <span style="color:#a6e22e">defer</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ . }}&#34;</span><span style="color:#f92672">&gt;</span> <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
-</span></span><span style="display:flex;"><span>    {{<span style="color:#f92672">-</span> <span style="color:#a6e22e">end</span> <span style="color:#f92672">-</span>}}
-</span></span><span style="display:flex;"><span>{{<span style="color:#f92672">-</span> <span style="color:#a6e22e">end</span> <span style="color:#f92672">-</span>}}
-</span></span></code></pre></div><p>To breifly explain this code, we are</p>
-<ul>
-<li>checking if our page is actually a blog post</li>
-<li>checking if we have js file params, and reading it.</li>
-<li>adding the script to the header.</li>
-</ul>
-<h3 id="program">Program<a hidden class="anchor" aria-hidden="true" href="#program">#</a></h3>
-<p>Now, we must actually write the program. Note that javascript only modifies the html file that is sitting on-top of the markdown file. For our purposes, we just change the markdown with a javascript function.</p>
-<p>To understand how our markdown is loaded in an html document, we can look at our themes &lsquo;single.html&rsquo; file, which is a mix of html and css.</p>
-<p>We can see in our file, we have our content loaded as :</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>  {{- if .Content }}
+</span></span></code></pre></div><p>and then the script would modify all of the contents of the markdown file.</p>
+<p>To do this, first we create a custom script in our <code>static/js/custom_script</code> (more on this later), and assumes it does what we want it to do. Now all we need to do is actually call it into a file.</p>
+<p>To do this, let&rsquo;s look at our single.html file (for our posts):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{{- if not (.Param &#34;hideMeta&#34;) }}
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post-meta&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    {{- partial &#34;post_meta.html&#34; . -}}
+</span></span><span style="display:flex;"><span>    {{- partial &#34;translation_list.html&#34; . -}}
+</span></span><span style="display:flex;"><span>    {{- partial &#34;edit_post.html&#34; . -}}
+</span></span><span style="display:flex;"><span>    {{- partial &#34;post_canonical.html&#34; . -}}
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">div</span>&gt;
+</span></span><span style="display:flex;"><span>{{- end }}
+</span></span></code></pre></div><p>we have a combination of html/js/css and php; the php is checking our parameters (in our header), while the html/js/css runs if the php allows it to.</p>
+<p>So, let&rsquo;s just check for our custom parameter:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{{- if (Param &#34;js_fetch_script&#34;) }}
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ &#34;</span><span style="color:#a6e22e">js</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">jupy_load</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">js</span><span style="color:#960050;background-color:#1e0010">&#34;</span> <span style="color:#960050;background-color:#1e0010">|</span> <span style="color:#a6e22e">relURL</span> <span style="color:#960050;background-color:#1e0010">}}&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>{{- end }}
+</span></span></code></pre></div><p>this seems to work. So, if we just include this at the end of our single.html, we can run arbitrary javascript, and completely modify our file.</p>
+<p>However, we&rsquo;ll also want to pass in a parameter (url), which we can do in the following way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{{- if (.Param &#34;js_fetch_script&#34;) }}
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ &#34;</span><span style="color:#a6e22e">js</span><span style="color:#960050;background-color:#1e0010">/</span><span style="color:#a6e22e">jupy_load</span><span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">js</span><span style="color:#960050;background-color:#1e0010">&#34;</span> <span style="color:#960050;background-color:#1e0010">|</span> <span style="color:#a6e22e">relURL</span> <span style="color:#960050;background-color:#1e0010">}}</span> <span style="color:#a6e22e">data-parameter</span><span style="color:#f92672">=</span><span style="color:#e6db74">{{</span> <span style="color:#960050;background-color:#1e0010">.</span><span style="color:#a6e22e">Param</span> <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">js_fetch_script</span><span style="color:#960050;background-color:#1e0010">&#34;</span> <span style="color:#960050;background-color:#1e0010">}}&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>{{- end }}
+</span></span></code></pre></div><p>which bascially checks if we fed in a file, and then passes in the parameter, which we can acess from our javascript like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>window.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;DOMContentLoaded&#39;</span>, <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Read the parameter
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">scripts</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">getElementsByTagName</span>(<span style="color:#e6db74">&#39;script&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">currentScript</span> <span style="color:#f92672">=</span> Array.<span style="color:#a6e22e">from</span>(<span style="color:#a6e22e">scripts</span>).<span style="color:#a6e22e">find</span>(<span style="color:#a6e22e">script</span> =&gt; <span style="color:#a6e22e">script</span>.<span style="color:#a6e22e">src</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#39;jupy_load.js&#39;</span>));
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">parameter</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">currentScript</span>.<span style="color:#a6e22e">getAttribute</span>(<span style="color:#e6db74">&#39;data-parameter&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">parameter</span>); <span style="color:#75715e">// Will print: param-value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#39;Error&#39;</span>, <span style="color:#a6e22e">error</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>Now we can pass in any parameter (we&rsquo;ll use this for the url later) into our file, and load it! Unfortunately, we actually have to search the script for jupy_load.js, but this is fine and still works (directly acessing the data-parameter didn&rsquo;t work).</p>
+<h3 id="modifying-our-file"><em><strong>Modifying our file</strong></em><a hidden class="anchor" aria-hidden="true" href="#modifying-our-file">#</a></h3>
+<p>Now, let&rsquo;s try to modify our post.</p>
+<p>The key part is our markdown; we still want to adhere to the overall site/style, so we only want to select the markdown.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{{- if .Content }}
 </span></span><span style="display:flex;"><span>  &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;post-content&#34;</span>&gt;
 </span></span><span style="display:flex;"><span>    {{- if not (.Param &#34;disableAnchoredHeadings&#34;) }}
 </span></span><span style="display:flex;"><span>    {{- partial &#34;anchored_headings.html&#34; .Content -}}
 </span></span><span style="display:flex;"><span>    {{- else }}{{ .Content }}{{ end }}
 </span></span><span style="display:flex;"><span>  &lt;/<span style="color:#f92672">div</span>&gt;
 </span></span><span style="display:flex;"><span>  {{- end }}
-</span></span></code></pre></div><p>ok, so what is .Content, and how can we modify it?</p>
+</span></span></code></pre></div><p>Ideally we would want to change the actual markdown, but this is impossible, as hugo does this in it&rsquo;s build process. Therefore to proceed, we would need to</p>
+<ol>
+<li>Fetch the content from a remote URL with javascript</li>
+<li>Create a custom javascript markdown converter that worked client-side</li>
+<li>Changed the HTML/CSS of site dynamically; effictively matching HUGO&rsquo;s functionality, but with javascript</li>
+</ol>
+<p>so, we will be procedding with python, since the process can still be streamlined; python will do the fetching, and modify the markdown content, so we can focus on formatting without having to re-write hugo.</p>
+<p>Perhaps I could visit this approach later, however I don&rsquo;t see a method that would work without using a github bot (maybe?), or some server.</p>
+<h1 id="python-approach">Python Approach<a hidden class="anchor" aria-hidden="true" href="#python-approach">#</a></h1>
+<p>With our python code, we have a much more flexible way to streamline our progress; and here is an overview of the functionality:</p>
+<ul>
+<li>Run a bash command that commits the repository, and fetches the remote jupyter-notebooks, updating our markdown files.</li>
+</ul>
+<p>Let&rsquo;s get into running our python scripts and making sure we can modify our markdown files, fetching the url/info from remote sites, parsing/formatting the jupyter notebooks, and finally running the batch-script which streamlines this process.</p>
+<h3 id="running-the-script">Running the script<a hidden class="anchor" aria-hidden="true" href="#running-the-script">#</a></h3>
+<p>First let&rsquo;s import/download these modules:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># for modifying files \</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># and reading/writing</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># for fetching url</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span></code></pre></div><p>we can simply modify a file like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;Hello world.&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>abspath(<span style="color:#e6db74">&#39;../blog/content/posts/test_note_b.md&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(path,<span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> file:
+</span></span><span style="display:flex;"><span>    print(file<span style="color:#f92672">.</span>read())
+</span></span></code></pre></div><h2 id="requests">Requests<a hidden class="anchor" aria-hidden="true" href="#requests">#</a></h2>
+<p>Now, let&rsquo;s try to understand how we are going to retreive the data, this part is very complex:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># requesting url</span>
+</span></span><span style="display:flex;"><span>r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url<span style="color:#f92672">=</span>url)
+</span></span><span style="display:flex;"><span>print(r<span style="color:#f92672">.</span>text)
+</span></span></code></pre></div><p>and now we have the text (the url was to a raw github link)!</p>
+<h2 id="parsing-the-json-the-crux">Parsing the JSON (the crux)<a hidden class="anchor" aria-hidden="true" href="#parsing-the-json-the-crux">#</a></h2>
+<p>Now, we need to be able to load an arbitrary url, and render the:</p>
+<ul>
+<li>code</li>
+<li>images</li>
+<li>output</li>
+</ul>
+<p>into our markdown file that we connect our post to (more on this later).</p>
+<p>First, let&rsquo;s analyze the output of the get request:</p>
+<p><style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">view get request</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&#34;cells&#34;</span>: [
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;cell_type&#34;</span>: <span style="color:#e6db74">&#34;markdown&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;metadata&#34;</span>: {},
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;source&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;### Using pre-trained HF vae&#34;</span>
+</span></span><span style="display:flex;"><span>   ]
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;cell_type&#34;</span>: <span style="color:#e6db74">&#34;code&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;execution_count&#34;</span>: <span style="color:#ae81ff">13</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;metadata&#34;</span>: {},
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;outputs&#34;</span>: [],
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;source&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;import huggingface_hub\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;import torch\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;from get_vae import get_vae\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;import sys\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;import os\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;sys.path.append(os.path.abspath(&#39;../data&#39;))\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;import dataloader\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;dataset = dataloader.ImageDataset(None,&#39;raw_images&#39;,\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;                                  label_folder=&#39;../data/label_folder&#39;,\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;                                  im_extension=&#39;jpeg&#39;,\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;                                  use_latents=True,\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;                                  latent_folder=&#39;../data/latent_folder_sdxl&#39;,\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;                                  device=&#39;cpu&#39;)\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;full_vae, encoder = get_vae()\n&#34;</span>
+</span></span><span style="display:flex;"><span>   ]
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;cell_type&#34;</span>: <span style="color:#e6db74">&#34;code&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;execution_count&#34;</span>: <span style="color:#ae81ff">18</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;metadata&#34;</span>: {},
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;outputs&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;stderr&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;output_type&#34;</span>: <span style="color:#e6db74">&#34;stream&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;text&#34;</span>: [
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-12.002044..16.78721].\n&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-0.0874937..0.815207].\n&#34;</span>
+</span></span><span style="display:flex;"><span>     ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;stdout&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;output_type&#34;</span>: <span style="color:#e6db74">&#34;stream&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;text&#34;</span>: [
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;torch.Size([1, 4, 32, 32]) torch.Size([3, 256, 256])\n&#34;</span>
+</span></span><span style="display:flex;"><span>     ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;stderr&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;output_type&#34;</span>: <span style="color:#e6db74">&#34;stream&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;text&#34;</span>: [
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-14.887081..17.92659].\n&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-0.11195281..0.91997355].\n&#34;</span>
+</span></span><span style="display:flex;"><span>     ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;stdout&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;output_type&#34;</span>: <span style="color:#e6db74">&#34;stream&#34;</span>,
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;text&#34;</span>: [
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;torch.Size([1, 4, 32, 32]) torch.Size([3, 256, 256])\n&#34;</span>
+</span></span><span style="display:flex;"><span>     ]
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;data&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;image/png&#34;</span>: <span style="color:#e6db74">&#34;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&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;text/plain&#34;</span>: [
+</span></span><span style="display:flex;"><span>       <span style="color:#e6db74">&#34;&lt;Figure size 640x480 with 4 Axes&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>      ]
+</span></span><span style="display:flex;"><span>     },
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;metadata&#34;</span>: {},
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">&#34;output_type&#34;</span>: <span style="color:#e6db74">&#34;display_data&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>   ],
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;source&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;import matplotlib.pyplot as plt\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;import torchvision\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;fig,ax = plt.subplots(2,2)\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;# outputs x,loss\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;for i in range(2):\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;    ind = torch.randint(0,len(dataset),size=(1,))\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;    datapt = dataset[ind][0]\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;    model_out = full_vae.decode(datapt.to(&#39;cpu&#39;))[0].to(&#39;cpu&#39;)\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;    print(datapt.shape,model_out.shape)\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;    with torch.no_grad():\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;        ax[i][0].imshow(datapt.squeeze(0).permute(1,2,0))\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;        ax[i][1].imshow(model_out.permute(1,2,0))\n&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;\n&#34;</span>
+</span></span><span style="display:flex;"><span>   ]
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span> ],
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&#34;metadata&#34;</span>: {
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;kernelspec&#34;</span>: {
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;display_name&#34;</span>: <span style="color:#e6db74">&#34;manimtest&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;language&#34;</span>: <span style="color:#e6db74">&#34;python&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;python3&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;language_info&#34;</span>: {
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;codemirror_mode&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;ipython&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>   },
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;file_extension&#34;</span>: <span style="color:#e6db74">&#34;.py&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;mimetype&#34;</span>: <span style="color:#e6db74">&#34;text/x-python&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;python&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;nbconvert_exporter&#34;</span>: <span style="color:#e6db74">&#34;python&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;pygments_lexer&#34;</span>: <span style="color:#e6db74">&#34;ipython3&#34;</span>,
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;3.12.7&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span> },
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&#34;nbformat&#34;</span>: <span style="color:#ae81ff">4</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&#34;nbformat_minor&#34;</span>: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+</details>
+</div>
+<br></p>
+<p>beleive it or not, the image/png was <em><strong>much</strong></em> longer, I just clipped the size.</p>
+<p>Now, let&rsquo;s outline the high-level structure of our data:</p>
+<pre tabindex="0"><code>1. &#34;cells&#34;, overall wrapper (list)
+2. dictionary for each cell: &#34;cell_type&#34;/&#34;source&#34;: specify cell-type, metadata, outputs
+3. Outputs: divided into the different &#39;types&#39; of outputs, with names and  
+</code></pre><p>So, here is code to print the high-level information</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://raw.githubusercontent.com/chuckles201/DiT-Implementation/refs/heads/main/VAE/download.ipynb&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># requesting url</span>
+</span></span><span style="display:flex;"><span>r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url<span style="color:#f92672">=</span>url)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># getting dict</span>
+</span></span><span style="display:flex;"><span>r <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(r<span style="color:#f92672">.</span>text)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(r[<span style="color:#e6db74">&#34;cells&#34;</span>])):
+</span></span><span style="display:flex;"><span>    ct <span style="color:#f92672">=</span> r[<span style="color:#e6db74">&#34;cells&#34;</span>][i][<span style="color:#e6db74">&#34;cell_type&#34;</span>]
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>ct<span style="color:#e6db74">}</span><span style="color:#e6db74">_#</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74"> keys: </span><span style="color:#e6db74">{</span>r[<span style="color:#e6db74">&#34;cells&#34;</span>][i]<span style="color:#f92672">.</span>keys()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)  
+</span></span></code></pre></div><p>Output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>markdown_#0 keys: dict_keys<span style="color:#f92672">([</span><span style="color:#e6db74">&#39;cell_type&#39;</span>, <span style="color:#e6db74">&#39;metadata&#39;</span>, <span style="color:#e6db74">&#39;source&#39;</span><span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>code_#1 keys: dict_keys<span style="color:#f92672">([</span><span style="color:#e6db74">&#39;cell_type&#39;</span>, <span style="color:#e6db74">&#39;execution_count&#39;</span>, <span style="color:#e6db74">&#39;metadata&#39;</span>, <span style="color:#e6db74">&#39;outputs&#39;</span>, <span style="color:#e6db74">&#39;source&#39;</span><span style="color:#f92672">])</span>
+</span></span><span style="display:flex;"><span>code_#2 keys: dict_keys<span style="color:#f92672">([</span><span style="color:#e6db74">&#39;cell_type&#39;</span>, <span style="color:#e6db74">&#39;execution_count&#39;</span>, <span style="color:#e6db74">&#39;metadata&#39;</span>, <span style="color:#e6db74">&#39;outputs&#39;</span>, <span style="color:#e6db74">&#39;source&#39;</span><span style="color:#f92672">])</span>
+</span></span></code></pre></div><h3 id="connecting-post-and-program">&lsquo;Connecting&rsquo; post and program<a hidden class="anchor" aria-hidden="true" href="#connecting-post-and-program">#</a></h3>
+<p>Let&rsquo;s start with the easy part; writing our markdown to our file.</p>
+<p>We&rsquo;ll create a dictionary of all the post-files and all of the urls, and for each post-file, we&rsquo;ll create a shortcode that does nothing, but specifies where we want our python file to start/stop the jupyter notebook.</p>
+<p>Here&rsquo;s the program:</p>
+<p><style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">code</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> regex <span style="color:#66d9ef">as</span> re
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">### Helper functions ###</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># function to write at specific </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># location in file</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">write_mdfile</span>(start_token,stop_token,file,to_write):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(file,<span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> file_read:
+</span></span><span style="display:flex;"><span>        text <span style="color:#f92672">=</span> file_read<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># split any new-line</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># parethesis preserve info</span>
+</span></span><span style="display:flex;"><span>    tokens <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>split(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;(\n+)&#39;</span>,text)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># replace all-inbetween!</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        start <span style="color:#f92672">=</span> tokens<span style="color:#f92672">.</span>index(start_token)
+</span></span><span style="display:flex;"><span>        stop <span style="color:#f92672">=</span> tokens<span style="color:#f92672">.</span>index(stop_token)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">&#34;Missing note-b token&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    tokens <span style="color:#f92672">=</span> [(tokens[i]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(tokens)) <span style="color:#66d9ef">if</span> i<span style="color:#f92672">&gt;</span>stop <span style="color:#f92672">or</span> i<span style="color:#f92672">&lt;</span>start]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># append to_write (note-b)</span>
+</span></span><span style="display:flex;"><span>    tokens<span style="color:#f92672">.</span>insert(start,to_write)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># inserting before/after the tokens...</span>
+</span></span><span style="display:flex;"><span>    tokens<span style="color:#f92672">.</span>insert(start<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,stop_token)
+</span></span><span style="display:flex;"><span>    tokens<span style="color:#f92672">.</span>insert(start,start_token)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># writing back to file</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(file,<span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> file_write:
+</span></span><span style="display:flex;"><span>        file_write<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(tokens))
+</span></span><span style="display:flex;"><span>    
+</span></span></code></pre></div>
+</details>
+</div>
+<br>
+This allows us to write to any markdown file, as long as we have our special start/top shortcodes, which we can easily include.</p>
+<p>Now, let&rsquo;s iterate through the dictionary of &lsquo;connected&rsquo; posts and urls, and write the url for each post, given our start/stop tokens.</p>
+<style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">code</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> regex <span style="color:#66d9ef">as</span> re
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">### Helper functions ###</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># function to write at specific </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># location in file</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">write_mdfile</span>(start_token,stop_token,file,to_write):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(file,<span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> file_read:
+</span></span><span style="display:flex;"><span>        text <span style="color:#f92672">=</span> file_read<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># split any new-line</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># parethesis preserve info</span>
+</span></span><span style="display:flex;"><span>    tokens <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>split(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;(\n+)&#39;</span>,text)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># replace all-inbetween!</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        start <span style="color:#f92672">=</span> tokens<span style="color:#f92672">.</span>index(start_token)
+</span></span><span style="display:flex;"><span>        stop <span style="color:#f92672">=</span> tokens<span style="color:#f92672">.</span>index(stop_token)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">&#34;Missing note-b token&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    tokens <span style="color:#f92672">=</span> [(tokens[i]) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(tokens)) <span style="color:#66d9ef">if</span> i<span style="color:#f92672">&gt;</span>stop <span style="color:#f92672">or</span> i<span style="color:#f92672">&lt;</span>start]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># append to_write (note-b)</span>
+</span></span><span style="display:flex;"><span>    tokens<span style="color:#f92672">.</span>insert(start,to_write)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># inserting before/after the tokens...</span>
+</span></span><span style="display:flex;"><span>    tokens<span style="color:#f92672">.</span>insert(start<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,stop_token)
+</span></span><span style="display:flex;"><span>    tokens<span style="color:#f92672">.</span>insert(start,start_token)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># writing back to file</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(file,<span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> file_write:
+</span></span><span style="display:flex;"><span>        file_write<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(tokens))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">json_to_md</span>(data):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> data
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">### MAIN PROGRAM ###</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># retreive url</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;post_to_url.json&#39;</span>,<span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>        post_url_dict <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>load(f)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> post <span style="color:#f92672">in</span> list(post_url_dict<span style="color:#f92672">.</span>keys()):
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> post_url_dict[post]
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># requesting url</span>
+</span></span><span style="display:flex;"><span>        r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># getting dict</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># adding \n for correctness</span>
+</span></span><span style="display:flex;"><span>        r <span style="color:#f92672">=</span> str(r<span style="color:#f92672">.</span>text)[:<span style="color:#ae81ff">1000</span>]
+</span></span><span style="display:flex;"><span>        r <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join([<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>,<span style="color:#e6db74">&#34;```json&#34;</span>,r,<span style="color:#e6db74">&#34;```&#34;</span>,<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># parsing text...</span>
+</span></span><span style="display:flex;"><span>        to_write <span style="color:#f92672">=</span> json_to_md(r) <span style="color:#75715e"># quick</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># creating file</span>
+</span></span><span style="display:flex;"><span>        path <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>abspath(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;../blog/content/posts/</span><span style="color:#e6db74">{</span>post<span style="color:#e6db74">}</span><span style="color:#e6db74">.md&#39;</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        write_mdfile(start_token<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ jupyter_token_start &gt;}}&#34;</span>,
+</span></span><span style="display:flex;"><span>                    stop_token<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ jupyter_token_end &gt;}}&#34;</span>,
+</span></span><span style="display:flex;"><span>                    file<span style="color:#f92672">=</span>path,
+</span></span><span style="display:flex;"><span>                    to_write<span style="color:#f92672">=</span>to_write)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;**********&#34;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Wrote file: </span><span style="color:#e6db74">{</span>path<span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">From URL: </span><span style="color:#e6db74">{</span>url<span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>len(r)<span style="color:#e6db74">}</span><span style="color:#e6db74"> chars)&#34;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#34;**********&#34;</span>)
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>main()
+</span></span></code></pre></div>
+</details>
+</div>
+<p>One last note, is that we may want to have our delimiter have &lsquo;%&rsquo; tags instead of &lsquo;&lt;&gt;&rsquo; so we can inject markdown.</p>
+<h3 id="dealing-with-markdown-cell">Dealing with markdown cell<a hidden class="anchor" aria-hidden="true" href="#dealing-with-markdown-cell">#</a></h3>
+<p>The markdown cell is the easiest, we simply will load in the markdown as-is (and add a new-line). I am saving all of the &lsquo;stream&rsquo; of cell-data into one-list.</p>
+<p>Basically, all we&rsquo;ll need to do for the markdown is to take the &rsquo;list&rsquo; of strings (each new line seperates a new element) and join them into one-long steam, and add a <code>\n</code> to have a new-line.</p>
+<p>here is the code so far:</p>
+<style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">code</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">json_to_md</span>(data_dict):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># list of cells</span>
+</span></span><span style="display:flex;"><span>    cells <span style="color:#f92672">=</span> data_dict[<span style="color:#e6db74">&#34;cells&#34;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># other info (like language)</span>
+</span></span><span style="display:flex;"><span>    metadata <span style="color:#f92672">=</span> data_dict[<span style="color:#e6db74">&#34;metadata&#34;</span>]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># full string/file</span>
+</span></span><span style="display:flex;"><span>    data_stream <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># for each cell which is a dictionary</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># with source,outputs,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i, cell <span style="color:#f92672">in</span> enumerate(cells):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># markdown cell</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> cell[<span style="color:#e6db74">&#34;cell_type&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;markdown&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># list of elements</span>
+</span></span><span style="display:flex;"><span>            lines <span style="color:#f92672">=</span> cell[<span style="color:#e6db74">&#34;source&#34;</span>]
+</span></span><span style="display:flex;"><span>            lines<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># concat</span>
+</span></span><span style="display:flex;"><span>            lines <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(lines)
+</span></span><span style="display:flex;"><span>            data_stream<span style="color:#f92672">.</span>append(lines)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> cell[<span style="color:#e6db74">&#34;cell_type&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;code&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><p>this works.</p>
+</details>
+</div>
+<h3 id="code-cell">Code-Cell<a hidden class="anchor" aria-hidden="true" href="#code-cell">#</a></h3>
+<p>Now we need to do the same thing, accept add our three <code>`</code> and specify the language. Luckily, this part will be very easy, and very similar to our markdown (we&rsquo;re not working on outputs yet.)</p>
+<style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">code</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> cell[<span style="color:#e6db74">&#34;cell_type&#34;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;code&#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">####### SOURCE #######</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># list of elements</span>
+</span></span><span style="display:flex;"><span>            lines <span style="color:#f92672">=</span> cell[<span style="color:#e6db74">&#34;source&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># for code-formatting</span>
+</span></span><span style="display:flex;"><span>            lines<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#34;```</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>) 
+</span></span><span style="display:flex;"><span>            lines<span style="color:#f92672">.</span>insert(<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;```</span><span style="color:#e6db74">{</span>language<span style="color:#e6db74">}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># concat</span>
+</span></span><span style="display:flex;"><span>            lines <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(lines)
+</span></span><span style="display:flex;"><span>            data_stream<span style="color:#f92672">.</span>append(lines)
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">#########################</span>
+</span></span></code></pre></div>
+</details>
+</div>
+<h3 id="code-cell-outputs">Code-Cell: Outputs<a hidden class="anchor" aria-hidden="true" href="#code-cell-outputs">#</a></h3>
+<p>Now ket&rsquo;s deal with the actual outputs of our code-cell, we&rsquo;ll be loading it the same way as jupyter, which is: Text, and then Image.</p>
+<p>Outputs are lists of dictionaries, where each dictionary is a unique &rsquo;type&rsquo; of output, for example we can have &rsquo;error&rsquo; messages from the terminal, images, and then the actual code-output.</p>
+<h4 id="text">Text<a hidden class="anchor" aria-hidden="true" href="#text">#</a></h4>
+<p>To deal with out text-outputs, we&rsquo;ll iterate through the list of dictionaries, and check what-type the output is. We&rsquo;ll just check if the text is &lsquo;stream&rsquo;, and then output based on this.Here are the types of streams:</p>
+<ul>
+<li>stderr: warnings/messages from console</li>
+<li>stdout output-code</li>
+</ul>
+<p>we&rsquo;ll highlight the stderr specially, as it is a warning (eventually)&hellip;</p>
+<p>We&rsquo;ll also create a special-output-box for our output so that it formats nicely on our site.</p>
+<p>So far, all we&rsquo;re doing is understanding the stucture of the dictionary that we get from our raw content, and then we simply load the outputs in-order, and append them to a list (which is then concatenated into a string). Once we do this, and we can add custom-formatting in the form of short-codes, but I&rsquo;m making it simplistic for now.</p>
+<p>For our code-cells since we have to deal with both &lsquo;stream&rsquo; and &lsquo;data&rsquo; ouputs, we iterate through all of the dictionaries inside of our cell-dictionary and siplay them in the same order.</p>
+<p>Since this got a little messy for me, here is the structure of the outputs:</p>
+<pre tabindex="0"><code>|Outputs (list)
+|   | Dictionary 1 
+|       | Type
+|       | Output
+|   | Dictionary 2
+|       | Type
+|       | Output
+|   | Dictionary~(Data)
+|       | Data:
+|           | Text/plain
+|           | Image
+</code></pre><p>So the outputs are a list of dictionaries, and each dictionary contains both the <em>information</em>, and data about the information. And it is displayed in order, so we iterate through the list of dictionaries, and display each in order.</p>
+<p>However, when we have &lsquo;data&rsquo; which is plain text/images, we have to acess another dictionary. I&rsquo;m not sure why they structured it this way, but it&rsquo;s what we&rsquo;re working with.</p>
+<h3 id="images">Images<a hidden class="anchor" aria-hidden="true" href="#images">#</a></h3>
+<p>Now, we&rsquo;ll have to convert images in our cell-outputs into, well, images.</p>
+<p>First, let&rsquo;s deal with the simple case where images are stored in BASE-64 format, which is a format used for JSON, where bits are encoded with printable characters.</p>
+<p>Here is a high-level view of the implementation of the function:</p>
+<ol>
+<li>We take the image-string/file-extentsion</li>
+<li>We create a new path for the image, which will be loaded from markdown.</li>
+<li>We convert the base64 to binary <a href="https://base64.guru/learn/base64-algorithm/decode">see here</a></li>
+<li>We save the image, and then insert a shortcode to load it:</li>
+</ol>
+<p>Image-Converter:
+<style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">code</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">image_base64_save</span>(raw_data,path_to_save):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># binary-writing-pdf</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bytes_to_img</span>(raw_str,save_path):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># decode to bytes</span>
+</span></span><span style="display:flex;"><span>        raw_bytes <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64decode(raw_str)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># temporary file</span>
+</span></span><span style="display:flex;"><span>        image <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(BytesIO(raw_bytes))
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># show image!</span>
+</span></span><span style="display:flex;"><span>        image<span style="color:#f92672">.</span>save(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>save_path<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    bytes_to_img(raw_data,path_to_save)
+</span></span></code></pre></div>
+</details>
+</div></p>
+<p>Usage:</p>
+<style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">code</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span> <span style="color:#75715e">### IMG-CONVERT ###</span>
+</span></span><span style="display:flex;"><span>img_in <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>image_types <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;png&#34;</span>,<span style="color:#e6db74">&#34;jpg&#34;</span>,<span style="color:#e6db74">&#34;jpeg&#34;</span>,<span style="color:#e6db74">&#34;img&#34;</span>,<span style="color:#e6db74">&#34;webp&#34;</span>,<span style="color:#e6db74">&#34;gif&#34;</span>,<span style="color:#e6db74">&#34;pdf&#34;</span>,<span style="color:#e6db74">&#34;svg&#34;</span>,<span style="color:#e6db74">&#34;eps&#34;</span>]
+</span></span><span style="display:flex;"><span>img_ext <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> type <span style="color:#f92672">in</span> image_types:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;image/</span><span style="color:#e6db74">{</span>type<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> list(output[<span style="color:#e6db74">&#34;data&#34;</span>]<span style="color:#f92672">.</span>keys()):
+</span></span><span style="display:flex;"><span>        img_in <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        img_ext <span style="color:#f92672">=</span> type
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> img_in:
+</span></span><span style="display:flex;"><span>    start <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> need_end:
+</span></span><span style="display:flex;"><span>        start <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{&lt; code_output summary=&#34;Output:&#34; open=&#34;true&#34; &gt;}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>
+</span></span><span style="display:flex;"><span>        need_end <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>    end <span style="color:#f92672">=</span> str(<span style="color:#e6db74">&#34;{&lt;/ code_output  br &gt;}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    need_end <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span> <span style="color:#75715e"># got end</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># saving image at path!</span>
+</span></span><span style="display:flex;"><span>    raw_data <span style="color:#f92672">=</span> output[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;image/</span><span style="color:#e6db74">{</span>img_ext<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># making sure path is correct</span>
+</span></span><span style="display:flex;"><span>    img_name <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;cell_</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">_img.png&#34;</span>
+</span></span><span style="display:flex;"><span>    path_img_new <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join([path_img, <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;/</span><span style="color:#e6db74">{</span>img_name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>])
+</span></span><span style="display:flex;"><span>    helpers<span style="color:#f92672">.</span>image_base64_save(raw_data<span style="color:#f92672">=</span>raw_data,
+</span></span><span style="display:flex;"><span>                                path_to_save<span style="color:#f92672">=</span>path_img_new)                            
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># not using /blog/static in md (implied)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># saving with image name</span>
+</span></span><span style="display:flex;"><span>    path_img_abs <span style="color:#f92672">=</span> path_img_new<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/blog/static&#34;</span>)[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;PATH SAVED: </span><span style="color:#e6db74">{</span>path_img_new<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;PATH MD: </span><span style="color:#e6db74">{</span>path_img_abs<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>    img_data <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">{</span><span style="color:#f92672">&lt;</span> image_output src<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{path_img_abs}</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    lines <span style="color:#f92672">=</span> [start]
+</span></span><span style="display:flex;"><span>    lines<span style="color:#f92672">.</span>append(img_data)
+</span></span><span style="display:flex;"><span>    lines<span style="color:#f92672">.</span>append(end)
+</span></span><span style="display:flex;"><span>    data_stream<span style="color:#f92672">.</span>append(<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(lines))
+</span></span><span style="display:flex;"><span><span style="color:#75715e">######################3</span>
+</span></span></code></pre></div>
+</details>
+</div>
+<blockquote>
+<p>Note: I messed around with the code a little so shortcodes did not accidentally render on this page.</p>
+</blockquote>
+<p>The main issue was dealing with the file extensions (saving vs. loading, because hugo assumes static directory), but that was easily fixed with some trial/error.</p>
+<h3 id="other-fixes">Other fixes<a hidden class="anchor" aria-hidden="true" href="#other-fixes">#</a></h3>
+<p>Another little problem I ran into was dealing with &lsquo;&lt;&gt;&rsquo; type-strings (they render as html) in our outputs, to deal with this, I had to learn how to replace all &lsquo;&lt;&gt;&rsquo; with their correspinding strings in regex, unless we actually wanted the short code. Here is that:</p>
+<style>
+  @keyframes textRainbow {
+    0% { color: red; }
+    16.7% { color: orange; }
+    33.3% { color: yellow; }
+    50% { color: green; }
+    66.7% { color: rgb(0, 204, 255); }
+    83.3% { color: rgb(0, 124, 130); }
+    100% { color: violet; }
+  }
+  
+    summary.test {
+      animation: textRainbow 30s linear infinite;
+      color: white;  
+      padding: 10px;
+      border-radius: 5px;  
+      text-align: left;  
+      cursor: pointer;  
+      background: #131313;
+      font-family: 'SF Mono', 'Cascadia Code', Menlo, monospace;
+      font-size: medium;
+    }
+
+    .rain_container {
+      margin: 0px;
+    }
+
+
+  </style>
+
+
+<div class="rain_container">
+<details >
+    <summary class="test">code</summary>
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> regex <span style="color:#66d9ef">as</span> re
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">format_out</span>(text):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Replace `&lt;` with `&amp;lt;` only if not preceeded by `{{&#39;</span>
+</span></span><span style="display:flex;"><span>    pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;(?&lt;![{{])&lt;&#39;</span>
+</span></span><span style="display:flex;"><span>    replacement <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&amp;lt;&#34;</span>
+</span></span><span style="display:flex;"><span>    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(pattern,replacement,text)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># preceeds two characters</span>
+</span></span><span style="display:flex;"><span>    pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;&gt;(?![}}])&#39;</span>
+</span></span><span style="display:flex;"><span>    replacement <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&amp;gt;&#34;</span>
+</span></span><span style="display:flex;"><span>    text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(pattern,replacement,text)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> text
+</span></span></code></pre></div>
+</details>
+</div>
+<h2 id="beautifying">Beautifying<a hidden class="anchor" aria-hidden="true" href="#beautifying">#</a></h2>
+<p>Now that we can load in markdown, code, and code-outputs, I tried to make the outputs actually look-nice.</p>
+<p>I basically just tried new CSS, and looked at what looked visually appealing. The code-display I settled on is currently displaying on this page.</p>
+<blockquote>
+<p>Note: Don&rsquo;t insert new scripts into page, it will affect everything! Create a new class and modify its CSS to play-around.</p>
+</blockquote>
+<p>I also made the choice to keep seperate collapsable boxes for each code-block, but if a code block directly followed another without an output, i left out an indent, while if an output followed, I kept an indent. This is because multiple succesive blocks without outputs are likely continualy building on eachother.</p>
+<h3 id="leaving-side-notes">Leaving side-notes<a hidden class="anchor" aria-hidden="true" href="#leaving-side-notes">#</a></h3>
+<p>I also wanted to add a way, so that in a given cell, I can leave a side-note (for editing in the website now), like a source being cited, or an explanation.</p>
+<blockquote>
+<p>I don&rsquo;t know if this is viable, because it makes the viewing experience more strenous, and will require some finicking with the CSS for now.</p>
+</blockquote>
+<h2 id="adding-other-files">Adding other files<a hidden class="anchor" aria-hidden="true" href="#adding-other-files">#</a></h2>
+<p>Ok, now we can easily generalize our program to check for different start/end tokens, and based on the token, load the raw-text differently. We can easily just have &rsquo;token_start_python(or-any-other-language)&rsquo; and just load the raw-file; this is in case for some reason we wanted a post dedicated to a single file (or just any page.)</p>
+<ul>
+<li>Example of .ipynb (jupyter notebooks): <a href="../test_ipynb">test_ipynb</a></li>
+<li>Example of python (or any other language): <a href="../raw_test">raw_test</a></li>
+</ul>
+<h2 id="streamlining1-execution">Streamlining/&lsquo;1-execution&rsquo;<a hidden class="anchor" aria-hidden="true" href="#streamlining1-execution">#</a></h2>
+<p>Now, finally we&rsquo;ll write a bash program that:</p>
+<ul>
+<li>Initialiazes/connects our site-repository. (<code>remote origin</code>)</li>
+<li>Run&rsquo;s the update-script, builds the website, and pushes them to github automatically</li>
+<li>Then, automatically goes into our <em><strong>JupyterToMd</strong></em> repository, and saves any updates we may have made here</li>
+</ul>
+<h1 id="reviewlearning-experience">Review/Learning Experience<a hidden class="anchor" aria-hidden="true" href="#reviewlearning-experience">#</a></h1>
 
 
   </div>
@@ -325,6 +1169,7 @@ Since our site is static, we&rsquo;ll need to have a built-in link to displaying
 
         
 </script>
+  
 </article>
     </main>
     
