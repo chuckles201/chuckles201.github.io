@@ -2,26 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://chuckles201.github.io/</loc>
     <lastmod>2024-12-24T14:06:32-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://chuckles201.github.io/posts/</loc>
     <lastmod>2024-12-24T14:06:32-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/jupyter_converter/</loc>
+    <loc>https://chuckles201.github.io/posts/jupyter_converter/</loc>
     <lastmod>2024-12-19T16:39:50-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/walkthru_site/</loc>
+    <loc>https://chuckles201.github.io/posts/walkthru_site/</loc>
     <lastmod>2024-12-18T21:26:37-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/archives/</loc>
+    <loc>https://chuckles201.github.io/archives/</loc>
   </url><url>
-    <loc>http://localhost:1313/manifesto/</loc>
+    <loc>https://chuckles201.github.io/manifesto/</loc>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://chuckles201.github.io/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/search/</loc>
+    <loc>https://chuckles201.github.io/search/</loc>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://chuckles201.github.io/tags/</loc>
   </url>
 </urlset>
