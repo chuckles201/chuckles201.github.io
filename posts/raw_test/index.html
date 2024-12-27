@@ -486,7 +486,15 @@ This is a test. ffff</p>
     }
 
     .rain_container {
+      overflow-x: scroll;
+      white-space: nowrap;
       margin: 0px;
+    }
+
+    .rain_det {
+      overflow-x: scroll;
+      white-space: nowrap;
+    
     }
 
 
@@ -494,7 +502,7 @@ This is a test. ffff</p>
 
 
 <div class="rain_container">
-<details open>
+<details open class="rain_det">
     <summary class="test">python</summary>
     <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch <span style="color:#f92672">import</span> nn <span style="color:#66d9ef">as</span> nn
