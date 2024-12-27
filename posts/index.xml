@@ -13,11 +13,26 @@
       <link>https://chuckles201.github.io/posts/autosocial/</link>
       <pubDate>Fri, 27 Dec 2024 08:17:49 -0500</pubDate>
       <guid>https://chuckles201.github.io/posts/autosocial/</guid>
-      <description>&lt;p&gt;Below is from readme.md of my autosocial LLM integration project:&lt;/p&gt;
+      <description>&lt;p&gt;&lt;br&gt;
+&lt;style&gt;
+    .special_title_text {
+        font-family: &#39;Franklin Gothic Medium&#39;, &#39;Arial Narrow&#39;, Arial, sans-serif;
+        color: greenyellow;
+    }
+
+
+&lt;/style&gt;
+&lt;div class=&#34;special_title_text&#34;&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Content below was automatically extracted from the &lt;a href=&#34;https://github.com/chuckles201/autosocial&#34;&gt;readme.md&lt;/a&gt; of my autosocial LLM integration project:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/div&gt;&lt;/p&gt;
 
 
 &lt;h1 id=&#34;autosocial&#34;&gt;autosocial&lt;/h1&gt;
-&lt;p&gt;Automatically posts to all desired socials, finetuned LLM writes appealing/good titles and descriptions for each platform.&lt;/p&gt;</description>
+&lt;p&gt;Automatically posts to all desired socials, finetuned LLM writes appealing/good titles and descriptions for each platform.&lt;/p&gt;
+
+&lt;img src=&#34;https://chuckles201.github.io/images/posts/autosocial/cycle.png&#34;&gt;</description>
     </item>
     <item>
       <title>Jupyter-To-Site</title>
