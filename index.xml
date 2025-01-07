@@ -6,22 +6,8 @@
     <description>Recent content on Charlie&#39;s Blog</description>
     <generator>Hugo -- 0.140.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Jan 2025 09:41:47 -0500</lastBuildDate>
+    <lastBuildDate>Fri, 27 Dec 2024 08:17:49 -0500</lastBuildDate>
     <atom:link href="https://chuckles201.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>CircuitryBasicsNotes</title>
-      <link>https://chuckles201.github.io/posts/circuitrybasicsnotes/</link>
-      <pubDate>Tue, 07 Jan 2025 09:41:47 -0500</pubDate>
-      <guid>https://chuckles201.github.io/posts/circuitrybasicsnotes/</guid>
-      <description>&lt;h1 id=&#34;notes-about-circuitry&#34;&gt;Notes About Circuitry&lt;/h1&gt;
-&lt;h3 id=&#34;pre-read&#34;&gt;Pre-read&lt;/h3&gt;
-&lt;p&gt;Before I begin the notes, the main things I have questions on are:&lt;/p&gt;
-&lt;p&gt;Do batteries have resistance; why can my microcontroller supply a 5/3v voltage, but not very high amps?&lt;/p&gt;
-&lt;p&gt;How do resistors stop current flow; do they also reduce voltage?&lt;/p&gt;
-&lt;p&gt;How do I understand intutively and deeply how electricity flows?&lt;/p&gt;
-&lt;p&gt;How do I understand the current and voltage at every part of a circuit?&lt;/p&gt;
-&lt;p&gt;Intuitively, what does current vs. voltage do?&lt;/p&gt;</description>
-    </item>
     <item>
       <title>Autosocial</title>
       <link>https://chuckles201.github.io/posts/autosocial/</link>
