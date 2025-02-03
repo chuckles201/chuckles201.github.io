@@ -4,7 +4,7 @@
     <title>Charlie&#39;s Blog</title>
     <link>https://chuckles201.github.io/</link>
     <description>Recent content on Charlie&#39;s Blog</description>
-    <generator>Hugo -- 0.140.2</generator>
+    <generator>Hugo -- 0.143.0</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 27 Dec 2024 08:17:49 -0500</lastBuildDate>
     <atom:link href="https://chuckles201.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -24,8 +24,7 @@
 &lt;/style&gt;
 &lt;div class=&#34;special_title_text&#34;&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Content below was automatically extracted from the &lt;a href=&#34;https://github.com/chuckles201/autosocial&#34;&gt;readme.md&lt;/a&gt; of my autosocial LLM integration project:&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;Content below was automatically extracted from the &lt;a href=&#34;https://github.com/chuckles201/autosocial&#34;&gt;readme.md&lt;/a&gt; of my autosocial LLM integration project:&lt;/p&gt;&lt;/blockquote&gt;
 &lt;/div&gt;&lt;/p&gt;
 
 
@@ -33,22 +32,6 @@
 &lt;p&gt;Automatically posts to all desired socials, finetuned LLM writes appealing/good titles and descriptions for each platform.&lt;/p&gt;
 
 &lt;img src=&#34;https://chuckles201.github.io/images/posts/autosocial/cycle.png&#34;&gt;</description>
-    </item>
-    <item>
-      <title>Jupyter-To-Site</title>
-      <link>https://chuckles201.github.io/posts/jupyter_converter/</link>
-      <pubDate>Thu, 19 Dec 2024 16:39:50 -0500</pubDate>
-      <guid>https://chuckles201.github.io/posts/jupyter_converter/</guid>
-      <description>&lt;p&gt;Here, we&amp;rsquo;ll be parsing our jupyter notebook from a random github link, and reading it out into markdown:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Markdown = markdown&lt;/li&gt;
-&lt;li&gt;Code = markdown code block&lt;/li&gt;
-&lt;li&gt;Code output = Images/code block&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Furthermore, we will fetch a github repo and automatically update it, when the file at the given like has been updated.&lt;/p&gt;
-&lt;p&gt;Latstly, we&amp;rsquo;ll be able to stack multiple notebooks into one &amp;lsquo;project&amp;rsquo;.&lt;/p&gt;
-&lt;h2 id=&#34;running-scripts-on-website&#34;&gt;Running scripts on website&lt;/h2&gt;
-&lt;p&gt;Since our site is static, we&amp;rsquo;ll need to have a built-in link to displaying our github page, and automatically converting it to markdown somehow inbetween.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Blog Manifesto</title>
