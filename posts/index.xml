@@ -30,21 +30,14 @@
 
 &lt;h1 id=&#34;autosocial&#34;&gt;autosocial&lt;/h1&gt;
 &lt;p&gt;Automatically posts to all desired socials, finetuned LLM writes appealing/good titles and descriptions for each platform.&lt;/p&gt;
-
-&lt;img src=&#34;https://chuckles201.github.io/images/posts/autosocial/cycle.png&#34;&gt;
 &lt;p&gt;GUI:
 
 &lt;img src=&#34;https://chuckles201.github.io/images/posts/autosocial/posting/images/exampleGUI.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Watch video:&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=pg5ajHkHW30&#34;&gt;
 &lt;img src=&#34;https://chuckles201.github.io/images/posts/autosocial/https://img.youtube.com/vi/pg5ajHkHW30/0.jpg&#34;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id=&#34;part-1-posting&#34;&gt;Part 1: Posting&lt;/h1&gt;
-&lt;p&gt;First, let&amp;rsquo;s understand each social-media that we&amp;rsquo;ll want to post to:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;How we make the post (API/other workaround for automatic post)&lt;/li&gt;
-&lt;li&gt;What format it expects (title, description, subtitle, etc.)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The platforms I want to use:&lt;/p&gt;</description>
+&lt;p&gt;&amp;gt; [!Note]
+I will probably not be using this as I post things in the future- although it was a cool/fun project! Personally, I beleive that posts should be made with care and intention- although this could be a glimpse into how future things will be done online.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
