@@ -35,6 +35,11 @@
 &lt;li&gt;How do we understand instructions being run and optimize this?&lt;/li&gt;
 &lt;li&gt;How to abstract/port this to python, new language?&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3 id=&#34;concepts-to-explain&#34;&gt;Concepts (to-explain)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Win-API&lt;/li&gt;
+&lt;li&gt;Windows Handles&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&#34;windows-api-&#34;&gt;Windows API 🪟&lt;/h1&gt;
 &lt;p&gt;Here, I will be struggling through trying to implement and understand the windows API!&lt;/p&gt;</description>
     </item>
