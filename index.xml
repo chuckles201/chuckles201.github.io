@@ -2,24 +2,49 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Charlie&#39;s Blog</title>
-    <link>http://localhost:1313/</link>
+    <link>https://chuckles201.github.io/</link>
     <description>Recent content on Charlie&#39;s Blog</description>
     <generator>Hugo -- 0.147.0</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 07 May 2025 09:58:50 -0400</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://chuckles201.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SimpleEncryption</title>
-      <link>http://localhost:1313/posts/simpleencryption/</link>
+      <link>https://chuckles201.github.io/posts/simpleencryption/</link>
       <pubDate>Wed, 07 May 2025 09:58:50 -0400</pubDate>
-      <guid>http://localhost:1313/posts/simpleencryption/</guid>
-      <description></description>
+      <guid>https://chuckles201.github.io/posts/simpleencryption/</guid>
+      <description>&lt;style&gt;
+    .special_title_text {
+        font-family: &#39;Franklin Gothic Medium&#39;, &#39;Arial Narrow&#39;, Arial, sans-serif;
+        color: greenyellow;
+    }
+
+
+&lt;/style&gt;
+&lt;div class=&#34;special_title_text&#34;&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Content below was  extracted from the &lt;a href=&#34;https://github.com/chuckles201/autosocial&#34;&gt;readme.md&lt;/a&gt; of my github repo:&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;THIS IS A TEMPORARY PLACEHOLDER!&lt;/p&gt;
+
+&lt;/div&gt;
+
+
+&lt;h1 id=&#34;autosocial&#34;&gt;autosocial&lt;/h1&gt;
+&lt;p&gt;Automatically posts to all desired socials, finetuned LLM writes appealing/good titles and descriptions for each platform.&lt;/p&gt;
+&lt;p&gt;GUI:
+
+&lt;img src=&#34;https://chuckles201.github.io/images/posts/SimpleEncryption/posting/images/exampleGUI.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Watch video:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=pg5ajHkHW30&#34;&gt;
+&lt;img src=&#34;https://chuckles201.github.io/images/posts/SimpleEncryption/https://img.youtube.com/vi/pg5ajHkHW30/0.jpg&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&amp;gt; [!Note]
+I will probably not be using this as I post things in the future- although it was a cool/fun project! Personally, I beleive that posts should be made with care and intention- although this could be a glimpse into how future things will be done online.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Autosocial</title>
-      <link>http://localhost:1313/posts/autosocial/</link>
+      <link>https://chuckles201.github.io/posts/autosocial/</link>
       <pubDate>Fri, 27 Dec 2024 08:17:49 -0500</pubDate>
-      <guid>http://localhost:1313/posts/autosocial/</guid>
+      <guid>https://chuckles201.github.io/posts/autosocial/</guid>
       <description>&lt;p&gt;&lt;br&gt;
 &lt;style&gt;
     .special_title_text {
@@ -39,18 +64,18 @@
 &lt;p&gt;Automatically posts to all desired socials, finetuned LLM writes appealing/good titles and descriptions for each platform.&lt;/p&gt;
 &lt;p&gt;GUI:
 
-&lt;img src=&#34;http://localhost:1313/images/posts/autosocial/posting/images/exampleGUI.png&#34;&gt;&lt;/p&gt;
+&lt;img src=&#34;https://chuckles201.github.io/images/posts/autosocial/posting/images/exampleGUI.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Watch video:&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=pg5ajHkHW30&#34;&gt;
-&lt;img src=&#34;http://localhost:1313/images/posts/autosocial/https://img.youtube.com/vi/pg5ajHkHW30/0.jpg&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;img src=&#34;https://chuckles201.github.io/images/posts/autosocial/https://img.youtube.com/vi/pg5ajHkHW30/0.jpg&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&amp;gt; [!Note]
 I will probably not be using this as I post things in the future- although it was a cool/fun project! Personally, I beleive that posts should be made with care and intention- although this could be a glimpse into how future things will be done online.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Blog Manifesto</title>
-      <link>http://localhost:1313/manifesto/</link>
+      <link>https://chuckles201.github.io/manifesto/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/manifesto/</guid>
+      <guid>https://chuckles201.github.io/manifesto/</guid>
       <description>manifesto</description>
     </item>
   </channel>
